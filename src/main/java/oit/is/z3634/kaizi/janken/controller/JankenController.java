@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import oit.is.z3634.kaizi.janken.model.Janken;
+
 // HTTPリクエストがあったときに呼び出されるクラス
 @Controller
 public class JankenController {
@@ -22,6 +24,17 @@ public class JankenController {
   @PostMapping("/janken")
   public String janken(@RequestParam String username, ModelMap model) {
     model.addAttribute("username", username);
+    return "janken.html";
+  }
+
+  // CPUとの対戦(手は固定)
+  @GetMapping("/jankengame")
+  public String vsCpu(@RequestParam String hand, ModelMap model) {
+    Janken player = new Janken(hand);
+    String cpuHand = "グー"; // CPUはグーで固定
+    model.addAttribute("playerHand", player.getHand());
+    model.addAttribute("cpuHand", cpuHand);
+    model.addAttribute("result", player.getResult());
     return "janken.html";
   }
 }

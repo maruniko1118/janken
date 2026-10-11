@@ -11,4 +11,16 @@
     <h1>Hi [[${username}]]</h1>
   </div>
 
+  <div>
+    <a href="/jankengame?hand=グー">グー</a>
+    <a href="/jankengame?hand=チョキ">チョキ</a>
+    <a href="/jankengame?hand=パー">パー</a>
+  </div>
+
+  <div th:if="${result}">
+    <p>あなたの手 : [[${playerHand}]]</p>
+    <p>相手の手 : [[${cpuHand}]]</p>
+    <p>結果 : [[${result}]]</p>
+  </div>
+
 </html>
