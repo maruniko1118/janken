@@ -11,10 +11,14 @@
     <h1>Hi [[${username}]]</h1>
   </div>
 
+  <div id="logout">
+    <a href="/logout">ログアウト</a>
+  </div>
+
   <div>
-    <a href="/jankengame?hand=グー">グー</a>
-    <a href="/jankengame?hand=チョキ">チョキ</a>
-    <a href="/jankengame?hand=パー">パー</a>
+    <a href="/janken/game?hand=グー">グー</a>
+    <a href="/janken/game?hand=チョキ">チョキ</a>
+    <a href="/janken/game?hand=パー">パー</a>
   </div>
 
   <div th:if="${result}">
