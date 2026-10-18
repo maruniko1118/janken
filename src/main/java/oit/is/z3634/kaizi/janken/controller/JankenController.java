@@ -30,10 +30,11 @@ public class JankenController {
   // CPUとの対戦(手は固定)
   @GetMapping("/jankengame")
   public String vsCpu(@RequestParam String hand, ModelMap model) {
+    Janken cpu = new Janken();
     Janken player = new Janken(hand);
-    String cpuHand = "グー"; // CPUはグーで固定
+    player.judge(cpu.getHand());
     model.addAttribute("playerHand", player.getHand());
-    model.addAttribute("cpuHand", cpuHand);
+    model.addAttribute("cpuHand", cpu.getHand());
     model.addAttribute("result", player.getResult());
     return "janken.html";
   }
