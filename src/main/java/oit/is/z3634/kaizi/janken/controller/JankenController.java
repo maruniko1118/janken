@@ -1,5 +1,8 @@
 package oit.is.z3634.kaizi.janken.controller;
 
+import java.security.Principal;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import oit.is.z3634.kaizi.janken.model.Entry;
 import oit.is.z3634.kaizi.janken.model.Janken;
 
 // HTTPリクエストがあったときに呼び出されるクラス
@@ -14,10 +18,17 @@ import oit.is.z3634.kaizi.janken.model.Janken;
 @RequestMapping("/janken")
 public class JankenController {
 
+  @Autowired
+  private Entry entry;
+
   // GETで "/janken" にアクセスがあった場合
   // ユーザー名を取得せず、janken.htmlを表示
   @GetMapping()
-  public String janken() {
+  public String janken(Principal prin, ModelMap model) {
+    String username = prin.getName();
+    this.entry.addUser(username);
+    model.addAttribute("username", username);
+    model.addAttribute("entry", entry);
     return "janken.html";
   }
 
