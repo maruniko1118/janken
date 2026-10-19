@@ -6,13 +6,26 @@
 </head>
 
 <body>
-  <!--usernameがnullで無い場合に表示する-->
-  <div th:if="${username}">
-    <h1>Hi [[${username}]]</h1>
-  </div>
+
+  <header>
+    <h1>じゃんけんゲームへようこそ</h1>
+  </header>
 
   <div id="logout">
     <a href="/logout">ログアウト</a>
+  </div>
+
+  <div th:if="${entry}">
+    <h2>エントリー</h2>
+    <ul>
+      <!--eachは所謂for each．この場合entryオブジェクトのusersフィールドにあるすべてのデータを一通り表示する
+        thが指定されているので[]が不要になる-->
+      <li th:each="user : ${entry.users}">[[${user}]]</li>
+    </ul>
+  </div>
+
+  <div th:if="${username}">
+    <h2>Hi [[${username}]]</h2>
   </div>
 
   <div>
