@@ -55,6 +55,14 @@ public class JankenController {
     return "janken.html";
   }
 
+  // 対戦ページへ移動
+  @GetMapping("match")
+  public String match(@RequestParam int id, ModelMap model) {
+    User user = UserMapper.selectUserById(id);
+    model.addAttribute("user", user);
+    return "match.html";
+  }
+
   // CPUとの対戦(手は固定)
   @GetMapping("game")
   public String vsCpu(@RequestParam String hand, ModelMap model) {
