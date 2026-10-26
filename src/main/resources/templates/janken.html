@@ -15,14 +15,14 @@
     <a href="/logout">ログアウト</a>
   </div>
 
-  <div th:if="${entry}">
+  <div th:if="${users}">
     <h2>エントリー</h2>
     <ul>
       <!--eachは所謂for each．この場合entryオブジェクトのusersフィールドにあるすべてのデータを一通り表示する
         thが指定されているので[]が不要になる-->
-      <li th:each="user : ${entry.users}">[[${user}]]</li>
+      <li th:each="user : ${users}">[[${user.name}]]</li>
     </ul>
-    <h3>現在、[[${entry.users.size()}]]人のユーザーが参加しています</h3>
+    <h3>現在、[[${users.size()}]]人のユーザーが参加しています</h3>
   </div>
 
   <div th:if="${username}">
