@@ -21,4 +21,20 @@
     </h2>
   </div>
 
+  <div>
+    <a th:href="@{/janken/fight(id=${user.id},hand='グー')}">グー</a>
+    <a th:href="@{/janken/fight(id=${user.id},hand='チョキ')}">チョキ</a>
+    <a th:href="@{/janken/fight(id=${user.id},hand='パー')}">パー</a>
+  </div>
+
+  <div th:if="${result}">
+    <p>あなたの手 : [[${playerHand}]]</p>
+    <p>相手の手 : [[${opponentHand}]]</p>
+    <p>結果 : [[${result}]]</p>
+  </div>
+
+  <div>
+    <a href="/janken">もどる</a>
+  </div>
+
 </html>

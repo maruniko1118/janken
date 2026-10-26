@@ -63,6 +63,31 @@ public class JankenController {
     return "match.html";
   }
 
+  // 対戦
+  @GetMapping("fight")
+  public String fight(Principal prin, @RequestParam int id, @RequestParam String hand, ModelMap model) {
+    // じゃんけんの処理
+    Janken playerJanken = new Janken(hand);
+    Janken opponentJanken = new Janken("グー");
+    playerJanken.judge(opponentJanken.getHand());
+    model.addAttribute("playerHand", playerJanken.getHand());
+    model.addAttribute("opponentHand", opponentJanken.getHand());
+    model.addAttribute("result", playerJanken.getResult());
+
+    // DB保存の処理
+    User playerUser = UserMapper.selectUserByName(prin.getName());
+    User opponentUser = UserMapper.selectUserById(id);
+    Match match = new Match();
+    match.setUser1(playerUser.getId());
+    match.setUser2(opponentUser.getId());
+    match.setUser1Hand(hand);
+    match.setUser2Hand("グー");
+    MatchMapper.insertMatch(match);
+    model.addAttribute("user", opponentUser);
+
+    return "match.html";
+  }
+
   // CPUとの対戦(手は固定)
   @GetMapping("game")
   public String vsCpu(@RequestParam String hand, ModelMap model) {
