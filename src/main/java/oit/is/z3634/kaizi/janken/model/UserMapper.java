@@ -15,4 +15,8 @@ public interface UserMapper {
   // ユーザーIDを使用して、ユーザー情報を1件取得する
   @Select("SELECT * FROM users WHERE id = #{id};")
   User selectUserById(int id);
+
+  // ユーザー名を使用して、ユーザー情報を1件取得する(ユーザー名の重複は考えない)
+  @Select("SELECT * FROM users WHERE name = #{name};")
+  User selectUserByName(String name);
 }
