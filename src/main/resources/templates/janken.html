@@ -15,6 +15,10 @@
     <a href="/logout">ログアウト</a>
   </div>
 
+  <div th:if="${username}">
+    <h2>Hi [[${username}]]</h2>
+  </div>
+
   <div th:if="${users}">
     <h2>エントリー</h2>
     <ul>
@@ -23,10 +27,6 @@
       <li th:each="user : ${users}">[[${user.name}]]</li>
     </ul>
     <h3>現在、[[${users.size()}]]人のユーザーが参加しています</h3>
-  </div>
-
-  <div th:if="${username}">
-    <h2>Hi [[${username}]]</h2>
   </div>
 
   <div>
