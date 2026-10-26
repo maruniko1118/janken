@@ -24,7 +24,11 @@
     <ul>
       <!--eachは所謂for each．この場合entryオブジェクトのusersフィールドにあるすべてのデータを一通り表示する
         thが指定されているので[]が不要になる-->
-      <li th:each="user : ${users}">[[${user.name}]]</li>
+      <li th:each="user : ${users}">
+        <a th:href="@{/janken/match(id=${user.id})}">
+          [[${user.name}]]
+        </a>
+      </li>
     </ul>
     <h3>現在、[[${users.size()}]]人のユーザーが参加しています</h3>
   </div>

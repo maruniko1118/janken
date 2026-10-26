@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <title>じゃんけんゲーム</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>Match</h1>
+  </header>
+
+  <div id="logout">
+    <a href="/logout">ログアウト</a>
+  </div>
+
+  <div th:if="${user}">
+    <h2>
+      <span sec:authentication="name"></span> V.S. [[${user.name}]]
+    </h2>
+  </div>
+
+</html>
