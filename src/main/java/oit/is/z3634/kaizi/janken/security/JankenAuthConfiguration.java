@@ -29,7 +29,12 @@ public class JankenAuthConfiguration {
         .authorizeHttpRequests(authz -> authz
             .requestMatchers("/janken").authenticated()
             .requestMatchers("/janken/*").authenticated() // /janken 以下は認証済みであること
-            .anyRequest().permitAll()); // 上記以外は全員アクセス可能
+            .anyRequest().permitAll()) // 上記以外は全員アクセス可能
+        .csrf(csrf -> csrf
+            .ignoringRequestMatchers("/h2-console/*")) // h2-console用にCSRF対策を無効化;
+        .headers(headers -> headers
+            .frameOptions(frameOptions -> frameOptions
+                .sameOrigin()));
 
     return http.build();
   }
