@@ -29,6 +29,16 @@
     <h3>現在、[[${users.size()}]]人のユーザーが参加しています</h3>
   </div>
 
+  <div th:if="${matches}">
+    <h2>試合結果</h2>
+    <div th:each="match : ${matches}">
+      <p>
+        id:[[${match.id}]] user1:[[${match.user1}]] user2:[[${match.user2}]] user1の手:[[${match.user1Hand}]]
+        user2の手:[[${match.user2Hand}]]
+      </p>
+    </div>
+  </div>
+
   <div>
     <a href="/janken/game?hand=グー">グー</a>
     <a href="/janken/game?hand=チョキ">チョキ</a>
