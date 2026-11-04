@@ -56,8 +56,10 @@ public class JankenAuthConfiguration {
         .password("{bcrypt}$2y$05$jbGp.n0DOX4.4S13SxmG8ea85ec9iMnK6fOC7pWpy/jtag9AQ2vVC").roles("USER").build();
     UserDetails honda = User.withUsername("ほんだ")
         .password("{bcrypt}$2y$05$1LkK9vy3K3HYXni9zNnmUeOfLB3/j2JYHJ2OKzp3A6liE2fj2TBzG").roles("USER").build();
+    UserDetails igaki = User.withUsername("いがき")
+        .password("{bcrypt}$2y$05$e0FFW0awdP90ZWnqu4aISe97tHzByLsrsq3nuf70EQavshWeJMql2").roles("USER").build();
 
     // 生成したユーザをImMemoryUserDetailsManagerに渡す
-    return new InMemoryUserDetailsManager(user1, user2, honda);
+    return new InMemoryUserDetailsManager(user1, user2, honda, igaki);
   }
 }

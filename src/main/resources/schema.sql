@@ -7,5 +7,13 @@ CREATE TABLE matches (
   user1 INT NOT NULL REFERENCES users(id),
   user2 INT NOT NULL REFERENCES users(id),
   user1Hand VARCHAR NOT NULL,
-  user2Hand VARCHAR NOT NULL
+  user2Hand VARCHAR NOT NULL,
+  isActive BOOLEAN NOT NULL
 );
+CREATE TABLE matchinfo (
+  id IDENTITY PRIMARY KEY,
+  user1 INT NOT NULL REFERENCES users(id),
+  user2 INT NOT NULL REFERENCES users(id),
+  user1Hand VARCHAR NOT NULL,
+  isActive BOOLEAN NOT NULL
+)
