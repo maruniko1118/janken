@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import oit.is.z3634.kaizi.janken.model.Entry;
 import oit.is.z3634.kaizi.janken.model.Janken;
 import oit.is.z3634.kaizi.janken.model.Match;
+import oit.is.z3634.kaizi.janken.model.MatchInfo;
+import oit.is.z3634.kaizi.janken.model.MatchInfoMapper;
 import oit.is.z3634.kaizi.janken.model.MatchMapper;
 import oit.is.z3634.kaizi.janken.model.User;
 import oit.is.z3634.kaizi.janken.model.UserMapper;
@@ -32,16 +34,21 @@ public class JankenController {
   @Autowired
   private MatchMapper MatchMapper;
 
+  @Autowired
+  private MatchInfoMapper MatchInfoMapper;
+
   // GETで "/janken" にアクセスがあった場合
   // ユーザー名を取得せず、janken.htmlを表示
   @GetMapping()
   public String janken(Principal prin, ModelMap model) {
     ArrayList<User> users = UserMapper.selectAllUser();
     ArrayList<Match> matches = MatchMapper.selectAllMatch();
+    ArrayList<MatchInfo> matchInfos = MatchInfoMapper.selectActiveMatchInfo();
     String username = prin.getName();
     this.entry.addUser(username);
     model.addAttribute("users", users);
     model.addAttribute("matches", matches);
+    model.addAttribute("matchInfos", matchInfos);
     model.addAttribute("username", username);
     model.addAttribute("entry", entry);
     return "janken.html";
@@ -86,6 +93,20 @@ public class JankenController {
     model.addAttribute("user", opponentUser);
 
     return "match.html";
+  }
+
+  // 結果待ち
+  @GetMapping("wait")
+  public String wait(Principal prin, @RequestParam int id, @RequestParam String hand, ModelMap model) {
+    User player = UserMapper.selectUserByName(prin.getName());
+    User opponent = UserMapper.selectUserById(id);
+    MatchInfo matchInfo = new MatchInfo();
+    matchInfo.setUser1(player.getId());
+    matchInfo.setUser2(opponent.getId());
+    matchInfo.setUser1Hand(hand);
+    matchInfo.setIsActive(true);
+    MatchInfoMapper.insertMatchInfo(matchInfo);
+    return "wait.html";
   }
 
   // CPUとの対戦(手は固定)
