@@ -22,9 +22,9 @@
   </div>
 
   <div>
-    <a th:href="@{/janken/fight(id=${user.id},hand='グー')}">グー</a>
-    <a th:href="@{/janken/fight(id=${user.id},hand='チョキ')}">チョキ</a>
-    <a th:href="@{/janken/fight(id=${user.id},hand='パー')}">パー</a>
+    <a th:href="@{/janken/wait(id=${user.id},hand='グー')}">グー</a>
+    <a th:href="@{/janken/wait(id=${user.id},hand='チョキ')}">チョキ</a>
+    <a th:href="@{/janken/wait(id=${user.id},hand='パー')}">パー</a>
   </div>
 
   <div th:if="${result}">
