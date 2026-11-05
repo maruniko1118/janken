@@ -5,24 +5,8 @@ import java.util.Random;
 
 public class Janken {
 
-  // メンバ一覧
-  private String hand;
-  private String result;
-
-  // コンストラクタ (CPU用)
-  public Janken() {
-    this.hand = setRandomHand();
-    this.result = null;
-  }
-
-  // コンストラクタ (Player用)
-  public Janken(String hand) {
-    this.hand = hand;
-    this.result = null;
-  }
-
-  // ランダムな手をセットする
-  private String setRandomHand() {
+  // ランダムな手を取得する
+  public String getRandomHand() {
     List<String> handList = List.of("グー", "チョキ", "パー");
     Random rand = new Random();
 
@@ -30,29 +14,29 @@ public class Janken {
   }
 
   // 勝ち負けの判定
-  public void judge(String enemyHand) {
+  public String judge(String player, String opponent) {
     String result;
-    switch (enemyHand) {
+    switch (player) {
       case "グー":
-        result = rockJudge();
+        result = rockJudge(opponent);
         break;
       case "チョキ":
-        result = scissorsJudge();
+        result = scissorsJudge(opponent);
         break;
       case "パー":
-        result = paperJudge();
+        result = paperJudge(opponent);
         break;
       default:
         result = null; // フロントエンドで "result == null" のとき結果が表示されない(仕様)。
         break;
     }
-    this.result = result;
+    return result;
   }
 
   // 相手がグー
-  private String rockJudge() {
+  private String rockJudge(String opponent) {
     String result;
-    switch (this.hand) {
+    switch (opponent) {
       case "グー":
         result = "あいこ";
         break;
@@ -70,9 +54,9 @@ public class Janken {
   }
 
   // 相手がチョキ
-  private String scissorsJudge() {
+  private String scissorsJudge(String opponent) {
     String result;
-    switch (this.hand) {
+    switch (opponent) {
       case "グー":
         result = "勝ち";
         break;
@@ -90,9 +74,9 @@ public class Janken {
   }
 
   // 相手がパー
-  private String paperJudge() {
+  private String paperJudge(String opponent) {
     String result;
-    switch (this.hand) {
+    switch (opponent) {
       case "グー":
         result = "負け";
         break;
@@ -107,13 +91,5 @@ public class Janken {
         break;
     }
     return result;
-  }
-
-  public String getHand() {
-    return this.hand;
-  }
-
-  public String getResult() {
-    return this.result;
   }
 }

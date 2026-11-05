@@ -51,16 +51,4 @@
     </div>
   </div>
 
-  <div>
-    <a href="/janken/game?hand=グー">グー</a>
-    <a href="/janken/game?hand=チョキ">チョキ</a>
-    <a href="/janken/game?hand=パー">パー</a>
-  </div>
-
-  <div th:if="${result}">
-    <p>あなたの手 : [[${playerHand}]]</p>
-    <p>相手の手 : [[${cpuHand}]]</p>
-    <p>結果 : [[${result}]]</p>
-  </div>
-
 </html>

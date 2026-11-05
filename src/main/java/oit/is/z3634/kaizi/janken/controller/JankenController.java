@@ -73,51 +73,47 @@ public class JankenController {
   // 対戦
   @GetMapping("fight")
   public String fight(Principal prin, @RequestParam int id, @RequestParam String hand, ModelMap model) {
-    // じゃんけんの処理
-    Janken playerJanken = new Janken(hand);
-    Janken opponentJanken = new Janken("グー");
-    playerJanken.judge(opponentJanken.getHand());
-    model.addAttribute("playerHand", playerJanken.getHand());
-    model.addAttribute("opponentHand", opponentJanken.getHand());
-    model.addAttribute("result", playerJanken.getResult());
-
-    // DB保存の処理
-    User playerUser = UserMapper.selectUserByName(prin.getName());
-    User opponentUser = UserMapper.selectUserById(id);
-    Match match = new Match();
-    match.setUser1(playerUser.getId());
-    match.setUser2(opponentUser.getId());
-    match.setUser1Hand(hand);
-    match.setUser2Hand("グー");
-    MatchMapper.insertMatch(match);
-    model.addAttribute("user", opponentUser);
-
-    return "match.html";
-  }
-
-  // 結果待ち
-  @GetMapping("wait")
-  public String wait(Principal prin, @RequestParam int id, @RequestParam String hand, ModelMap model) {
     User player = UserMapper.selectUserByName(prin.getName());
     User opponent = UserMapper.selectUserById(id);
-    MatchInfo matchInfo = new MatchInfo();
-    matchInfo.setUser1(player.getId());
-    matchInfo.setUser2(opponent.getId());
-    matchInfo.setUser1Hand(hand);
-    matchInfo.setIsActive(true);
-    MatchInfoMapper.insertMatchInfo(matchInfo);
-    return "wait.html";
-  }
 
-  // CPUとの対戦(手は固定)
-  @GetMapping("game")
-  public String vsCpu(@RequestParam String hand, ModelMap model) {
-    Janken cpu = new Janken();
-    Janken player = new Janken(hand);
-    player.judge(cpu.getHand());
-    model.addAttribute("playerHand", player.getHand());
-    model.addAttribute("cpuHand", cpu.getHand());
-    model.addAttribute("result", player.getResult());
-    return "janken.html";
+    ArrayList<MatchInfo> matchInfos = MatchInfoMapper
+        .selectActiveMatchInfoByUsername(player.getId());
+
+    Janken janken = new Janken();
+
+    if (matchInfos.size() > 0) {
+      MatchInfo activeMatchInfo = matchInfos.get(0);
+      String result = janken.judge(activeMatchInfo.getUser1Hand(), hand);
+      model.addAttribute("playerHand", hand);
+      model.addAttribute("opponentHand", activeMatchInfo.getUser1Hand());
+      model.addAttribute("result", result);
+      model.addAttribute("user", opponent);
+
+      // DB保存の処理
+      Match match = new Match();
+      match.setUser1(activeMatchInfo.getUser1());
+      match.setUser2(player.getId());
+      match.setUser1Hand(activeMatchInfo.getUser1Hand());
+      match.setUser2Hand(hand);
+      match.setIsActive(true);
+      MatchMapper.insertMatch(match);
+
+      // matchinfo の該当レコードの isActive を FALSE に更新
+      activeMatchInfo.setIsActive(false);
+      MatchInfoMapper.updateMatchInfo(activeMatchInfo);
+
+      return "match.html";
+
+    } else {
+
+      MatchInfo matchInfo = new MatchInfo();
+      matchInfo.setUser1(player.getId());
+      matchInfo.setUser2(opponent.getId());
+      matchInfo.setUser1Hand(hand);
+      matchInfo.setIsActive(true);
+      MatchInfoMapper.insertMatchInfo(matchInfo);
+      return "wait.html";
+
+    }
   }
 }
