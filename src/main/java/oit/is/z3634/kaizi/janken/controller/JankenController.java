@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.z3634.kaizi.janken.model.Entry;
 import oit.is.z3634.kaizi.janken.model.Janken;
@@ -19,6 +20,7 @@ import oit.is.z3634.kaizi.janken.model.MatchInfoMapper;
 import oit.is.z3634.kaizi.janken.model.MatchMapper;
 import oit.is.z3634.kaizi.janken.model.User;
 import oit.is.z3634.kaizi.janken.model.UserMapper;
+import oit.is.z3634.kaizi.janken.service.AsyncKekka;
 
 // HTTPリクエストがあったときに呼び出されるクラス
 @Controller
@@ -36,6 +38,9 @@ public class JankenController {
 
   @Autowired
   private MatchInfoMapper MatchInfoMapper;
+
+  @Autowired
+  private AsyncKekka asyncKekka;
 
   // GETで "/janken" にアクセスがあった場合
   // ユーザー名を取得せず、janken.htmlを表示
@@ -102,6 +107,9 @@ public class JankenController {
       activeMatchInfo.setIsActive(false);
       MatchInfoMapper.updateMatchInfo(activeMatchInfo);
 
+      // 非同期通知用フラグ更新
+      this.asyncKekka.dbUpdated = true;
+
       return "match.html";
 
     } else {
@@ -115,5 +123,13 @@ public class JankenController {
       return "wait.html";
 
     }
+  }
+
+  // SSEで対戦結果を非同期送信
+  @GetMapping("wait")
+  public SseEmitter waitKekka() {
+    final SseEmitter sseEmitter = new SseEmitter();
+    this.asyncKekka.asyncShowKekka(sseEmitter);
+    return sseEmitter;
   }
 }

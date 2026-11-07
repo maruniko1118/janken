@@ -1,8 +1,28 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
 
 <head>
+  <meta charset="utf-8">
   <title>じゃんけんゲーム</title>
+  <script>
+    window.onload = function () {
+      var sse = new EventSource('/janken/wait');
+      sse.onmessage = function (event) {
+        console.log("sse.onmessage");
+        console.log(event.data);
+        var match = JSON.parse(event.data);
+        var bgn_p = "<p>";
+        var end_p = "</p>";
+        var result_h2 = "<h2>結果</h2>";
+        var result_p = "Match: id: " + match.id + " user1: " + match.user1 + " user2: " + match.user2
+          + " user1Hand: " + match.user1Hand + " user2Hand: " + match.user2Hand;
+        var result_back = "<div><a href='/janken'>戻る</a></div>";
+        var result_body = document.getElementById("result");
+        result_body.innerHTML = result_h2 + bgn_p + result_p + end_p + result_back;
+        sse.close();
+      }
+    }
+  </script>
 </head>
 
 <body>
@@ -15,8 +35,9 @@
     Hi <span sec:authentication="name"></span>
   </h2>
 
-  <div>
-    <a href="/janken">もどる</a>
+  <div id="result">
   </div>
+
+</body>
 
 </html>
